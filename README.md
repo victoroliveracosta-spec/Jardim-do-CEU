@@ -1,10 +1,14 @@
 # Jardim do Céu — Localizador de memórias
 
-Código completo para GitHub Pages, adaptado para **Jardim do Céu Cemitério Parque, Pouso Alegre–MG**, conforme os anexos fornecidos. Inclui logo, Google Maps em satélite, botão de rotas e interface de busca por nome, idade, falecimento, quadra, setor e jazigo.
+Código completo para GitHub Pages, adaptado para **Jardim do Céu Cemitério Parque, Pouso Alegre–MG**, conforme os anexos fornecidos. Inclui logo, Google Maps em satélite, botão de rotas e busca por nome com código do jazigo e origem do registro.
 
-## Situação da base
+## Base consolidada
 
-**A planilha do Jardim do Céu ainda não foi fornecida.** `dados.json` está vazio e o site mostra “Consulta de falecidos em preparação”. Não foram reaproveitados falecidos, datas ou localizações de outro cemitério, nem adicionados nomes fictícios. O mapa e a rota até o cemitério já funcionam. A busca é habilitada automaticamente quando `dados.json` contém registros válidos.
+Inclui **5.706 registros**: Livro I (1.978), Livro II (1.998) e Livro III (1.730). Nomes, códigos de jazigos e observações foram preservados. Registros repetidos não foram eliminados automaticamente; livro e número do registro permitem distinguir homônimos. Dois registros não têm jazigo informado.
+
+Os livros não fornecem idade, nascimento, data de falecimento ou coordenadas. A interface exibe “Idade não informada”. Os códigos E/I são apresentados como escritos, sem inferir quadra ou setor. Três registros têm observações de exumação: aparecem como históricos e nunca oferecem rota a um jazigo. A localização atual deve ser confirmada na recepção.
+
+A aba administrativa LOCAÇÃO foi preservada somente na planilha consolidada entregue separadamente. Seus clientes não entram na busca nem neste pacote público.
 
 ## Publicar no GitHub Pages
 
@@ -26,34 +30,29 @@ Na pasta do projeto, execute `python -m http.server 8000` (ou `py -m http.server
 - `style.css`: estilos responsivos e identidade visual.
 - `app.js`: busca, ficha e Google Maps.
 - `config.js`: endereço do cemitério e opções do mapa.
-- `dados.json`: lista de falecidos; atualmente `[]`.
+- `dados.json`: lista dos 5.706 registros consolidados.
 - `localizacoes.json`: coordenadas confirmadas dos jazigos; atualmente `{}`.
 - `logo.png`: imagem enviada, preservada como recebida.
-- `scripts/converter_planilha.py`: conversor de relatório XLS compatível.
+- `scripts/importar_livros.py`: importador dos livros XLS/XLSX e da planilha consolidada.
 - `requirements.txt`: dependência do conversor; não é necessária para abrir o site.
 - `.nojekyll`: publicação estática pelo GitHub Pages.
 
-## Inserir os registros
+## Atualizar os registros
 
-Cada item de `dados.json` deve ter os campos abaixo. Não coloque este modelo incompleto na base: preencha com dados reais e conferidos.
-
-| Campo | Tipo | Conteúdo |
-| --- | --- | --- |
-| `id` | número | Identificador único |
-| `name` | texto | Nome completo |
-| `location` | texto | Localização no padrão `CEM: nome  .  QRD: quadra  .  SET: setor  .  JAZ: jazigo`; vazio se ausente |
-| `age` | texto | Idade ao falecer; vazio se ausente |
-| `calculated` | booleano | `true` se calculada pelas datas; caso contrário `false` |
-| `death` | texto | Data de falecimento em DD/MM/AAAA; vazio se ausente |
-
-O conversor funciona com relatório `.xls` cuja primeira aba tenha, na segunda linha, “Nome Completo” na coluna A, “Localização” na E, “Nascimento” na F, “Idade” na H e “Falecimento” na I. Se a planilha do Jardim do Céu tiver estrutura diferente, adapte o conversor antes de executar.
+O importador lê abas com as colunas LIVRO, FALECIDO e JAZIGO nas primeiras 15 linhas. Preserva observações, livro de origem, códigos com zeros iniciais e registros repetidos. IDs internos são sequenciais; o número original fica em `register`.
 
 ```sh
 python -m pip install -r requirements.txt
-python scripts/converter_planilha.py "Falecidos Jardim do Ceu.xls" --output dados.json
+python scripts/importar_livros.py "RELAÇÃO FALECIDOS LIVRO I.xls" "RELAÇÃO FALECIDOS LIVRO II.xlsx" "RELAÇÃO DE FALECIDOS LIVRO III.xlsx" --output dados.json
 ```
 
-Não envie o relatório original ao repositório. O conversor gera somente os campos usados no site, sem CPF. Dados estáticos publicados podem ser baixados integralmente pelos visitantes; esta versão não tem autenticação. Confirme também se a coluna Localização representa o jazigo atual, especialmente após traslados.
+Também aceita a planilha unificada:
+
+```sh
+python scripts/importar_livros.py "Jardim_do_Ceu_Falecidos_Consolidado.xlsx" --output dados.json
+```
+
+Publique o novo `dados.json` e recarregue o site com internet. O conversor ignora a aba de locação. Não coloque os livros originais nem a planilha administrativa consolidada na pasta pública do site. Os registros em `dados.json` são públicos e podem ser baixados integralmente; esta versão não tem autenticação.
 
 ## Google Maps
 
@@ -76,3 +75,7 @@ O Google pode não reconhecer os caminhos internos ou acessíveis do cemitério.
 - Maps Embed API: https://developers.google.com/maps/documentation/embed/embedding-map
 
 Este pacote é independente e não foi enviado automaticamente a nenhuma conta GitHub.
+
+## Uso em totem e instalação
+
+Esta versão adiciona **Tela cheia**, **Expandir mapa** e **Instalar aplicativo**. Consulte `TOTEM.md` para instalação, operação e modo quiosque Windows. Publique os arquivos novos junto com os anteriores.

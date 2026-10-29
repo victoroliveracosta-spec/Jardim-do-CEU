@@ -1,0 +1,18 @@
+/* Controles para telas sensíveis ao toque e quiosques. */
+.totem-actions{display:flex;gap:8px;align-items:center;margin-left:auto;flex-wrap:wrap}
+.totem-actions button,.map-expand-button,#restoreMap{min-height:48px;font-size:14px;font-weight:600;padding:10px 16px;touch-action:manipulation}
+header{min-height:110px;height:auto;padding-top:8px;padding-bottom:8px;gap:22px}
+header .quiet{margin-left:0;min-height:48px}
+.map-top{gap:12px;flex-wrap:wrap}.map-top-actions{display:flex;gap:10px;align-items:center}
+#viewport:fullscreen,#viewport.map-expanded{width:100vw!important;height:100dvh!important;min-height:0!important;margin:0!important;border:0!important;border-radius:0!important;background:#dbe4d8;padding-top:66px;box-sizing:border-box}
+#viewport:fullscreen #googleMap,#viewport.map-expanded #googleMap{height:100%;width:100%}
+#viewport.map-expanded{position:fixed;inset:0;z-index:9999}.map-is-expanded{overflow:hidden}
+#restoreMap{position:absolute;top:9px;right:16px;z-index:2;background:white;border:1px solid #cad4c9;color:var(--green);box-shadow:0 2px 8px #0002}
+#totemMessage{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:10001;background:#233f31;color:white;padding:16px 24px;border-radius:10px;max-width:min(680px,94vw);box-shadow:0 4px 20px #0003}
+#networkStatus{background:#fff1cc;color:#604800;text-align:center;padding:10px;font-size:13px}
+#installDialog h2{font:28px Georgia,serif}#installDialog li{margin-bottom:14px;line-height:1.7}#closeInstall{min-width:48px;min-height:48px}
+html:fullscreen{overflow:auto;background:var(--paper)}
+.searchbox{min-height:56px}.searchbox input{font-size:16px}.result{min-height:70px;padding:18px}.result strong{font-size:16px}.result .meta,.result .loc{font-size:13px}
+@media(min-width:1000px){html:fullscreen main{min-height:calc(100dvh - 180px)}html:fullscreen #viewport{height:clamp(400px,55dvh,900px)}}
+@media(max-width:1100px){header .head-title{display:none}header{gap:12px}}
+@media(max-width:700px){header{padding:8px 16px}.totem-actions{gap:6px;width:100%;margin:0;order:3}.totem-actions button{flex:1;padding:8px;font-size:13px}header .quiet{margin-left:auto}.map-top-actions{width:100%;justify-content:space-between}.map-top{margin-bottom:16px}.map-expand-button{margin-left:auto}.map-links a{min-height:48px;display:inline-flex;align-items:center}}
